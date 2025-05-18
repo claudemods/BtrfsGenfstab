@@ -33,6 +33,7 @@ echo "Checking and adding subvolume entries..."
 {
     echo ""
     echo "# Btrfs subvolumes (auto-added)"
+    grep -q "UUID=$ROOT_UUID.*/ .*subvol=/@" /etc/fstab || echo "UUID=$ROOT_UUID /              btrfs   subvol=/@,defaults,noatime,compress=zstd,commit=120 0 0"
     grep -q "UUID=$ROOT_UUID.*/root" /etc/fstab       || echo "UUID=$ROOT_UUID /root          btrfs   subvol=/@root,defaults,noatime,compress=zstd,commit=120 0 0"
     grep -q "UUID=$ROOT_UUID.*/home" /etc/fstab       || echo "UUID=$ROOT_UUID /home          btrfs   subvol=/@home,defaults,noatime,compress=zstd,commit=120 0 0"
     grep -q "UUID=$ROOT_UUID.*/srv" /etc/fstab        || echo "UUID=$ROOT_UUID /srv           btrfs   subvol=/@srv,defaults,noatime,compress=zstd,commit=120 0 0"
