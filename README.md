@@ -4,6 +4,7 @@
 
 <h1 align="center">(BtrfsGenFstab)</h1>
 
+<div align="center">
 <strong>Script To Generate Your Btrs System Fstab 
 <div align="center">
 With Mounts @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machines<strong>
