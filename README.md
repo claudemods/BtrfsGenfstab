@@ -24,5 +24,3 @@ With Mounts @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machin
 
 
 
-# BtrfsGenfstab
-
