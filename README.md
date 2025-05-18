@@ -22,5 +22,6 @@ With Mounts @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machin
   
 [![Version](https://img.shields.io/github/v/release/claudemods/BtrfsGenfstab?color=FFD700&label=Latest%20Release&style=for-the-badge)](https://github.com/claudemods/BtrfsGenfstab/releases/tag/v1.0)
 
+![Screenshot_archlinux-clone_2025-05-18_16:24:19](https://github.com/user-attachments/assets/cb4534fa-e520-466e-a68c-b1826382b65e)
 
 
