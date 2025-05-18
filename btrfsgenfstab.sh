@@ -15,7 +15,7 @@ cat << 'EOF'
 ╚█████╔╝███████╗██║░░██║╚██████╔╝██████╔╝███████╗██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
-echo -e "${cyan_color}claudemods btrfs system fstab generator v1.0${reset_color}"
+echo -e "${cyan_color}claudemods BtrfsGenFstab v1.0${reset_color}"
 
 # Set ALL remaining text to cyan
 echo -e "${cyan_color}"
