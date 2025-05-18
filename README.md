@@ -7,7 +7,7 @@
 <div align="center">
 <strong>Script To Generate Your Btrs System Fstab 
 <div align="center">
-With Mounts @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machines<strong>
+With Mounts @ @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machines<strong>
 
  
 <div align="center">
@@ -22,6 +22,6 @@ With Mounts @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machin
   
 [![Version](https://img.shields.io/github/v/release/claudemods/BtrfsGenfstab?color=FFD700&label=Latest%20Release&style=for-the-badge)](https://github.com/claudemods/BtrfsGenfstab/releases/tag/v1.0)
 
-![Screenshot_archlinux-clone_2025-05-18_16:24:19](https://github.com/user-attachments/assets/cb4534fa-e520-466e-a68c-b1826382b65e)
+![Screenshot_archlinux-clone_2025-05-18_16:33:12](https://github.com/user-attachments/assets/48764883-0659-4f6a-be5d-29c92babc063)
 
 
