@@ -8,8 +8,8 @@
 <strong>Script To Generate Your Btrs System Fstab 
 <div align="center">
 With Mounts @ @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machines<strong>
-
- 
+<div align="center">
+ please execute script with sudo 
 <div align="center">
   <a href="https://www.deepseek.com/" target="_blank">
     <img alt="Homepage" src="https://i.postimg.cc/Hs2vbbZ8/Deep-Seek-Homepage.png" style="height: 30px; width: auto;">
@@ -20,8 +20,8 @@ With Mounts @ @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/mach
 <a href="https://cachyos.org/" target="_blank"><img src="https://img.shields.io/badge/DISTRO-CachyOS-00FFFF?style=for-the-badge&logo=CachyOS" /></a>
 
   
-[![Version](https://img.shields.io/github/v/release/claudemods/BtrfsGenfstab?color=FFD700&label=Latest%20Release&style=for-the-badge)](https://github.com/claudemods/BtrfsGenfstab/releases/tag/v1.0)
+[![Version](https://img.shields.io/github/v/release/claudemods/BtrfsGenfstab?color=FFD700&label=Latest%20Release&style=for-the-badge)](https://github.com/claudemods/BtrfsGenfstab/releases/tag/v1.01)
 
-![Screenshot_archlinux-clone_2025-05-18_16:33:12](https://github.com/user-attachments/assets/48764883-0659-4f6a-be5d-29c92babc063)
+![Screenshot_archlinux-clone_2025-05-18_16:55:37](https://github.com/user-attachments/assets/ba8b731d-eb8d-4cc7-9ec8-1b5b930bf978)
 
 
