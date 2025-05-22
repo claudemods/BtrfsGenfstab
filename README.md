@@ -9,8 +9,6 @@
 <div align="center">
 With Mounts @ @root @home @srv @cache @tmp @log @var/lib/portables @var/lib/machines<strong>
 <div align="center">
- please execute script with sudo 
-<div align="center">
   <a href="https://www.deepseek.com/" target="_blank">
     <img alt="Homepage" src="https://i.postimg.cc/Hs2vbbZ8/Deep-Seek-Homepage.png" style="height: 30px; width: auto;">
   </a>
