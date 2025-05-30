@@ -15,7 +15,7 @@ cat << 'EOF'
 ╚█████╔╝███████╗██║░░██║╚██████╔╝██████╔╝███████╗██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
-echo -e "${cyan_color}claudemods BtrfsGenFstab v1.04 (User Mode)${reset_color}"
+echo -e "${cyan_color}claudemods BtrfsGenFstab Zstd 15 Compression${reset_color}"
 
 # Set ALL remaining text to cyan
 echo -e "${cyan_color}"
