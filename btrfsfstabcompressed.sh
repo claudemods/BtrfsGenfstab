@@ -15,7 +15,7 @@ cat << 'EOF'
 ╚█████╔╝███████╗██║░░██║╚██████╔╝██████╔╝███████╗██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
-echo -e "${cyan_color}claudemods BtrfsGenFstab v1.03 (User Mode)${reset_color}"
+echo -e "${cyan_color}claudemods BtrfsGenFstab v1.04 (User Mode)${reset_color}"
 
 # Set ALL remaining text to cyan
 echo -e "${cyan_color}"
@@ -47,7 +47,17 @@ echo "Checking and adding subvolume entries..."
     run_privileged grep -q "UUID=$ROOT_UUID.*/var/log" /etc/fstab   || echo "UUID=$ROOT_UUID /var/log       btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@log 0 0"
 } | run_privileged tee -a /etc/fstab >/dev/null
 
-echo -e "Installation Complete You Can Now Reboot"
+echo -e "\nInstallation Complete"
+
+# Reboot prompt
+read -p "Do you want to reboot now? (y/N): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "${cyan_color}Rebooting system...${reset_color}"
+    run_privileged reboot
+else
+    echo -e "${cyan_color}You may need to reboot for changes to take effect.${reset_color}"
+fi
 
 # Reset terminal color before exiting
 echo -ne "${reset_color}"
