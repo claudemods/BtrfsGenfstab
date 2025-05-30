@@ -28,11 +28,7 @@ cp /etc/fstab /etc/fstab.bak || { echo -e "${red_color}Error: Could not backup f
 echo "Getting root UUID..."
 ROOT_UUID=$(findmnt -no UUID /) || { echo -e "${red_color}Error: Could not get root UUID${reset_color}"; exit 1; }
 
-# Get boot UUID (first vfat partition)
-echo "Getting boot UUID..."
-BOOT_UUID=$(lsblk -f | awk '/vfat/ {print $3; exit}') || { echo -e "${red_color}Error: Could not get boot UUID${reset_color}"; exit 1; }
-
-# Check and add ONLY the mounts you specified
+# Check and add ONLY the mounts you specified (with zstd:15 compression)
 echo "Checking and adding subvolume entries..."
 {
     echo ""
@@ -44,13 +40,6 @@ echo "Checking and adding subvolume entries..."
     grep -q "UUID=$ROOT_UUID.*/var/cache" /etc/fstab || echo "UUID=$ROOT_UUID /var/cache     btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@cache 0 0"
     grep -q "UUID=$ROOT_UUID.*/var/tmp" /etc/fstab   || echo "UUID=$ROOT_UUID /var/tmp       btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@tmp 0 0"
     grep -q "UUID=$ROOT_UUID.*/var/log" /etc/fstab   || echo "UUID=$ROOT_UUID /var/log       btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@log 0 0"
-    
-    # Add boot entry if not present
-    grep -q "UUID=$BOOT_UUID.*/boot" /etc/fstab || {
-        echo ""
-        echo "# Boot partition"
-        echo "UUID=$BOOT_UUID /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro 0 2"
-    }
 } >> /etc/fstab
 
 echo -e "Installation Complete You Can Now Reboot"
