@@ -15,7 +15,7 @@ cat << 'EOF'
 ╚█████╔╝███████╗██║░░██║╚██████╔╝██████╔╝███████╗██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
-echo -e "${cyan_color}claudemods BtrfsGenFstab Zstd 15 compression v1.02${reset_color}"
+echo -e "${cyan_color}claudemods BtrfsGenFstab v1.01${reset_color}"
 
 # Set ALL remaining text to cyan
 echo -e "${cyan_color}"
@@ -28,10 +28,10 @@ cp /etc/fstab /etc/fstab.bak || { echo -e "${red_color}Error: Could not backup f
 echo "Getting root UUID..."
 ROOT_UUID=$(findmnt -no UUID /) || { echo -e "${red_color}Error: Could not get root UUID${reset_color}"; exit 1; }
 
-# Check and add ONLY the mounts you specified (with zstd:15 compression)
+# Check and add ONLY the mounts you specified
 echo "Checking and adding subvolume entries..."
 {
-    echo ""
+ echo ""
     echo "# Btrfs subvolumes (auto-added)"
     grep -q "UUID=$ROOT_UUID.*/ .*subvol=/@" /etc/fstab || echo "UUID=$ROOT_UUID /              btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@ 0 0"
     grep -q "UUID=$ROOT_UUID.*/root" /etc/fstab       || echo "UUID=$ROOT_UUID /root          btrfs   rw,noatime,compress=zstd:15,discard=async,space_cache=v2,subvol=/@root 0 0"
