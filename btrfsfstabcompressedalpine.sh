@@ -5,7 +5,7 @@ red_color="\033[38;2;255;0;0m"
 cyan_color="\033[38;2;0;255;255m"
 reset_color="\033[0m"
 
-# Display header in red
+# Display header
 echo -e "${red_color}"
 cat << 'EOF'
 ░█████╗░██╗░░░░░░█████╗░██║░░░██╗██████╗░███████╗███╗░░░███╗░█████╗░██████╗░░██████╗
@@ -16,41 +16,39 @@ cat << 'EOF'
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
 echo -e "${cyan_color}claudemods BtrfsGenFstab v1.01 Zstd Level 22 Compression${reset_color}"
-
-# Set ALL remaining text to cyan
 echo -e "${cyan_color}"
 
-# Ask for password once at the beginning
-echo "Please enter your password for doas authentication:"
-doas -v || { echo -e "${red_color}Authentication failed${reset_color}"; exit 1; }
+# Authenticate ONCE at start
+echo "Enter your password for doas (will be cached):"
+if ! doas -v; then
+    echo -e "${red_color}Authentication failed${reset_color}"
+    exit 1
+fi
 
-# Function to run commands with doas (reuses existing auth)
-run_privileged() {
-    doas -n -- "$@"
-}
+# Now run ALL privileged commands in ONE SESSION
+doas sh -c '
+    # Backup fstab
+    echo "Backing up fstab..."
+    cp /etc/fstab /etc/fstab.bak || { echo "Backup failed"; exit 1; }
 
-# Backup existing fstab
-echo "Backing up fstab..."
-run_privileged cp /etc/fstab /etc/fstab.bak || { echo -e "${red_color}Error: Could not backup fstab${reset_color}"; exit 1; }
+    # Get root UUID
+    ROOT_UUID=$(findmnt -no UUID /) || { echo "Failed getting UUID"; exit 1; }
 
-# Get root UUID from current / mount
-echo "Getting root UUID..."
-ROOT_UUID=$(run_privileged findmnt -no UUID /) || { echo -e "${red_color}Error: Could not get root UUID${reset_color}"; exit 1; }
+    # Generate new fstab entries
+    {
+        echo ""
+        echo "# Btrfs subvolumes (auto-added)"
+        grep -q "UUID=$ROOT_UUID.*/ .*subvol=/@" /etc/fstab || echo "UUID=$ROOT_UUID /              btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@ 0 0"
+        grep -q "UUID=$ROOT_UUID.*/root" /etc/fstab       || echo "UUID=$ROOT_UUID /root          btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@root 0 0"
+        grep -q "UUID=$ROOT_UUID.*/home" /etc/fstab       || echo "UUID=$ROOT_UUID /home          btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@home 0 0"
+        grep -q "UUID=$ROOT_UUID.*/srv" /etc/fstab        || echo "UUID=$ROOT_UUID /srv           btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@srv 0 0"
+        grep -q "UUID=$ROOT_UUID.*/var/cache" /etc/fstab || echo "UUID=$ROOT_UUID /var/cache     btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@cache 0 0"
+        grep -q "UUID=$ROOT_UUID.*/var/tmp" /etc/fstab   || echo "UUID=$ROOT_UUID /var/tmp       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@tmp 0 0"
+        grep -q "UUID=$ROOT_UUID.*/var/log" /etc/fstab   || echo "UUID=$ROOT_UUID /var/log       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@log 0 0"
+    } >> /etc/fstab
+'
 
-# Check and add ONLY the mounts you specified
-echo "Checking and adding subvolume entries..."
-{
-    echo ""
-    echo "# Btrfs subvolumes (auto-added)"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/ .*subvol=/@" /etc/fstab || echo "UUID=$ROOT_UUID /              btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@ 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/root" /etc/fstab       || echo "UUID=$ROOT_UUID /root          btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@root 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/home" /etc/fstab       || echo "UUID=$ROOT_UUID /home          btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@home 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/srv" /etc/fstab        || echo "UUID=$ROOT_UUID /srv           btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@srv 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/var/cache" /etc/fstab || echo "UUID=$ROOT_UUID /var/cache     btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@cache 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/var/tmp" /etc/fstab   || echo "UUID=$ROOT_UUID /var/tmp       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@tmp 0 0"
-    run_privileged grep -q "UUID=$ROOT_UUID.*/var/log" /etc/fstab   || echo "UUID=$ROOT_UUID /var/log       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@log 0 0"
-} | run_privileged tee -a /etc/fstab >/dev/null
-
+# Completion message
 echo -e "\nInstallation Complete"
 
 # Reboot prompt
@@ -58,10 +56,9 @@ read -p "Do you want to reboot now? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo -e "${cyan_color}Rebooting system...${reset_color}"
-    run_privileged reboot
+    doas reboot
 else
-    echo -e "${cyan_color}You may need to reboot for changes to take effect.${reset_color}"
+    echo -e "${cyan_color}Changes will take effect after reboot${reset_color}"
 fi
 
-# Reset terminal color before exiting
 echo -ne "${reset_color}"
