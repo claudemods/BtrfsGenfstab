@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 
 # Colors
 red_color="\033[38;2;255;0;0m"
@@ -20,9 +20,13 @@ echo -e "${cyan_color}claudemods BtrfsGenFstab v1.01 Zstd Level 22 Compression${
 # Set ALL remaining text to cyan
 echo -e "${cyan_color}"
 
-# Function to run commands with doas
+# Ask for password once at the beginning
+echo "Please enter your password for doas authentication:"
+doas -v || { echo -e "${red_color}Authentication failed${reset_color}"; exit 1; }
+
+# Function to run commands with doas (reuses existing auth)
 run_privileged() {
-    doas -- "$@"
+    doas -n -- "$@"
 }
 
 # Backup existing fstab
