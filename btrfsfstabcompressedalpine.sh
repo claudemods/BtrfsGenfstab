@@ -18,13 +18,6 @@ EOF
 echo -e "${cyan_color}claudemods BtrfsGenFstab v1.01 Zstd Level 22 Compression${reset_color}"
 echo -e "${cyan_color}"
 
-# Authenticate ONCE at start
-echo "Enter your password for doas (will be cached):"
-if ! doas -v; then
-    echo -e "${red_color}Authentication failed${reset_color}"
-    exit 1
-fi
-
 # Now run ALL privileged commands in ONE SESSION
 doas sh -c '
     # Backup fstab
