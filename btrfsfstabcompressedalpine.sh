@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ash
 
 # Colors
 red_color="\033[38;2;255;0;0m"
