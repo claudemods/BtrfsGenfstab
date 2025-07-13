@@ -15,7 +15,7 @@ cat << 'EOF'
 ╚█████╔╝███████╗██║░░██║╚██████╔╝██████╔╝███████╗██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝
 ░╚════╝░╚══════╝╚═╝░░╚═╝░╚═════╝░╚═════╝░╚══════╝╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░
 EOF
-echo -e "${cyan_color}claudemods BtrfsGenFstab v1.01 Zstd Level 22 Compression${reset_color}"
+echo -e "${cyan_color}claudemods BtrfsGenFstab alpine v1.02 Zstd Level 22 Compression${reset_color}"
 echo -e "${cyan_color}"
 
 # Now run ALL privileged commands in ONE SESSION
@@ -27,7 +27,7 @@ doas sh -c '
     # Get root UUID
     ROOT_UUID=$(findmnt -no UUID /) || { echo "Failed getting UUID"; exit 1; }
 
-    # Generate new fstab entries
+    # Generate new fstab entries with additional mounts
     {
         echo ""
         echo "# Btrfs subvolumes (auto-added)"
@@ -38,6 +38,8 @@ doas sh -c '
         grep -q "UUID=$ROOT_UUID.*/var/cache" /etc/fstab || echo "UUID=$ROOT_UUID /var/cache     btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@cache 0 0"
         grep -q "UUID=$ROOT_UUID.*/var/tmp" /etc/fstab   || echo "UUID=$ROOT_UUID /var/tmp       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@tmp 0 0"
         grep -q "UUID=$ROOT_UUID.*/var/log" /etc/fstab   || echo "UUID=$ROOT_UUID /var/log       btrfs   rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@log 0 0"
+        grep -q "UUID=$ROOT_UUID.*/var/lib/portables" /etc/fstab || echo "UUID=$ROOT_UUID /var/lib/portables btrfs rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@/var/lib/portables 0 0"
+        grep -q "UUID=$ROOT_UUID.*/var/lib/machines" /etc/fstab || echo "UUID=$ROOT_UUID /var/lib/machines btrfs rw,noatime,compress=zstd:22,discard=async,space_cache=v2,subvol=/@/var/lib/machines 0 0"
     } >> /etc/fstab
 '
 
